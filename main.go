@@ -1,34 +1,36 @@
 package main
 
-import(
+import (
 	_ "image/png"
+
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 const (
-	screenWidth = 640
+	screenWidth  = 640
 	screenHeight = 480
 )
 
-var(
+var (
 	player Character
 )
 
-type Game struct{
+type Game struct {
 }
 
 func (g *Game) Update() error {
-	player.Update();
+	player.ReadInputs()
+	player.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	player.Draw(screen, op);
+	player.Draw(screen, op)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-		return screenWidth, screenHeight
+	return screenWidth, screenHeight
 }
 
 func main() {
