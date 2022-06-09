@@ -9,24 +9,25 @@ import (
 const (
 	screenWidth  = 640
 	screenHeight = 480
+	sampleRate   = 32000
 )
 
 var (
-	player Character
+	eManager EntityManager
 )
 
 type Game struct {
 }
 
 func (g *Game) Update() error {
-	player.ReadInputs()
-	player.Update()
+	eManager.ReadInputs()
+	eManager.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	player.Draw(screen, op)
+	eManager.Draw(screen, op)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -37,7 +38,7 @@ func main() {
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Isn't he cute?")
 
-	player.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+	eManager.Init()
 
 	game := &Game{}
 	if err := ebiten.RunGame(game); err != nil {
