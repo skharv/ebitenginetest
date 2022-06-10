@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -32,11 +31,6 @@ func (c *Character) ReadInputs() {
 }
 
 func (c *Character) Update() {
-	fmt.Println(c.width)
-	fmt.Println(c.height)
-	fmt.Println(c.posX)
-	fmt.Println(c.posY)
-	fmt.Println("--------")
 }
 
 func (c *Character) Draw(screen *ebiten.Image) {
