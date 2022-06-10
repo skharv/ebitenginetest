@@ -14,7 +14,7 @@ var (
 
 func (e *EntityManager) Init() {
 	var npc Character
-	npc.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+	npc.Init(screenWidth/2, screenHeight/2, "images/face.png")
 
 	characters = append(characters, npc)
 
