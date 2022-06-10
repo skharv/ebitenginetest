@@ -8,6 +8,7 @@ import (
 )
 
 type Character struct {
+	name   string
 	posX   float64
 	posY   float64
 	width  int
@@ -15,14 +16,15 @@ type Character struct {
 	sprite *ebiten.Image
 }
 
-func (c *Character) Init(x, y float64, filepath string) {
-	img, _, err := ebitenutil.NewImageFromFile(filepath)
+func (c *Character) Init(Name string, X, Y float64, ImageFilepath string) {
+	img, _, err := ebitenutil.NewImageFromFile(ImageFilepath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	c.posX = x
-	c.posY = y
+	c.name = Name
+	c.posX = X
+	c.posY = Y
 	c.sprite = img
 	c.width, c.height = c.sprite.Size()
 }

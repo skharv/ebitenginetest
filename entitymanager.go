@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -8,18 +10,21 @@ type EntityManager struct {
 }
 
 var (
-	characters []Character
+	characters []EnemyCharacter
 	players    []PlayerCharacter
 )
 
 func (e *EntityManager) Init() {
-	var npc Character
-	npc.Init(screenWidth/2, screenHeight/2, "images/face.png")
 
-	characters = append(characters, npc)
+	for i := 0; i < 9; i++ {
+		var npc EnemyCharacter
+		npc.Init("Face "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/face.png")
+
+		characters = append(characters, npc)
+	}
 
 	var player PlayerCharacter
-	player.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+	player.Init("Cute Baby", screenWidth/2, screenHeight/2, "images/babby.png")
 
 	players = append(players, player)
 }

@@ -10,8 +10,8 @@ type PlayerCharacter struct {
 	up, down, left, right bool
 }
 
-func (p *PlayerCharacter) Init(x, y float64, filepath string) {
-	p.character.Init(x, y, filepath)
+func (p *PlayerCharacter) Init(Name string, X, Y float64, ImageFilepath string) {
+	p.character.Init(Name, X, Y, ImageFilepath)
 }
 
 func (p *PlayerCharacter) ReadInputs() {
