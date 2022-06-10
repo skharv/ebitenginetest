@@ -19,7 +19,7 @@ func (e *EntityManager) Init() {
 	characters = append(characters, npc)
 
 	var player PlayerCharacter
-	npc.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+	player.Init(screenWidth/2, screenHeight/2, "images/babby.png")
 
 	players = append(players, player)
 }
@@ -44,12 +44,12 @@ func (e *EntityManager) Update() {
 	}
 }
 
-func (e *EntityManager) Draw(screen *ebiten.Image, options *ebiten.DrawImageOptions) {
+func (e *EntityManager) Draw(screen *ebiten.Image) {
 	for i := range characters {
-		characters[i].Draw(screen, options)
+		characters[i].Draw(screen)
 	}
 
 	for i := range players {
-		players[i].Draw(screen, options)
+		players[i].Draw(screen)
 	}
 }

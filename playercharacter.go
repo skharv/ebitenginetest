@@ -60,6 +60,6 @@ func (p *PlayerCharacter) Update() {
 	p.character.Update()
 }
 
-func (p *PlayerCharacter) Draw(screen *ebiten.Image, options *ebiten.DrawImageOptions) {
-	p.character.Draw(screen, options)
+func (p *PlayerCharacter) Draw(screen *ebiten.Image) {
+	p.character.Draw(screen)
 }
