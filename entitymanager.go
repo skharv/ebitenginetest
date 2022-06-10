@@ -8,31 +8,48 @@ type EntityManager struct {
 }
 
 var (
-	entities []Character
+	characters []Character
+	players    []PlayerCharacter
 )
 
 func (e *EntityManager) Init() {
-	var player Character
-	player.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+	var npc Character
+	npc.Init(screenWidth/2, screenHeight/2, "images/babby.png")
 
-	entities = append(entities, player)
+	characters = append(characters, npc)
+
+	var player PlayerCharacter
+	npc.Init(screenWidth/2, screenHeight/2, "images/babby.png")
+
+	players = append(players, player)
+}
+
+func (e *EntityManager) ReadInputs() {
+	for i := range characters {
+		characters[i].ReadInputs()
+	}
+
+	for i := range players {
+		players[i].ReadInputs()
+	}
 }
 
 func (e *EntityManager) Update() {
-	for i := range entities {
-		entities[i].Update()
+	for i := range characters {
+		characters[i].Update()
+	}
+
+	for i := range players {
+		players[i].Update()
 	}
 }
 
 func (e *EntityManager) Draw(screen *ebiten.Image, options *ebiten.DrawImageOptions) {
-	for i := range entities {
-		entities[i].Draw(screen, options)
+	for i := range characters {
+		characters[i].Draw(screen, options)
 	}
 
-}
-
-func (e *EntityManager) ReadInputs() {
-	for i := range entities {
-		entities[i].ReadInputs()
+	for i := range players {
+		players[i].Draw(screen, options)
 	}
 }

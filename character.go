@@ -5,20 +5,17 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Character struct {
-	posX                  float64
-	posY                  float64
-	width                 int
-	height                int
-	sprite                *ebiten.Image
-	up, down, left, right bool
+	posX   float64
+	posY   float64
+	width  int
+	height int
+	sprite *ebiten.Image
 }
 
 func (c *Character) Init(x, y float64, filepath string) {
-
 	img, _, err := ebitenutil.NewImageFromFile(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -30,47 +27,10 @@ func (c *Character) Init(x, y float64, filepath string) {
 	c.width, c.height = c.sprite.Size()
 }
 
-func (c *Character) Update() {
-
-	if c.up {
-		c.posY--
-	}
-	if c.down {
-		c.posY++
-	}
-	if c.left {
-		c.posX--
-	}
-	if c.right {
-		c.posX++
-	}
+func (c *Character) ReadInputs() {
 }
 
-func (c *Character) ReadInputs() {
-	if inpututil.IsKeyJustPressed(ebiten.KeyW) {
-		c.up = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyW) {
-		c.up = false
-	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyA) {
-		c.left = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyA) {
-		c.left = false
-	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyS) {
-		c.down = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyS) {
-		c.down = false
-	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyD) {
-		c.right = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyD) {
-		c.right = false
-	}
+func (c *Character) Update() {
 }
 
 func (c *Character) Draw(screen *ebiten.Image, options *ebiten.DrawImageOptions) {
