@@ -6,55 +6,46 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type EntityManager struct {
+type Entity interface {
+	Init(Name string, X, Y float64, ImageFilepath string)
+	ReadInput()
+	Update(deltaTime float64)
+	Draw(screen *ebiten.Image)
 }
 
-var (
-	characters []EnemyCharacter
-	players    []PlayerCharacter
-)
+type EntityManager struct {
+	entities []Entity
+}
 
 func (e *EntityManager) Init() {
 
 	for i := 0; i < 9; i++ {
-		var npc EnemyCharacter
-		npc.Init("Face "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/enemy.png")
+		npc := &EnemyCharacter{}
+		npc.Init("Baddie "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/enemy.png")
 
-		characters = append(characters, npc)
+		e.entities = append(e.entities, npc)
 	}
 
-	var player PlayerCharacter
-	player.Init("Cute Baby", ScreenWidth/2, ScreenHeight/2, "images/player.png")
+	player := &PlayerCharacter{}
+	player.Init("You", ScreenWidth/2, ScreenHeight/2, "images/player.png")
 
-	players = append(players, player)
+	e.entities = append(e.entities, player)
 }
 
 func (e *EntityManager) ReadInput() {
-	for i := range characters {
-		characters[i].ReadInput()
-	}
-
-	for i := range players {
-		players[i].ReadInput()
+	for i := range e.entities {
+		e.entities[i].ReadInput()
 	}
 }
 
 func (e *EntityManager) Update(deltaTime float64) {
-	for i := range characters {
-		characters[i].Update(deltaTime)
-	}
-
-	for i := range players {
-		players[i].Update(deltaTime)
+	for i := range e.entities {
+		e.entities[i].Update(deltaTime)
 	}
 }
 
 func (e *EntityManager) Draw(screen *ebiten.Image) {
-	for i := range characters {
-		characters[i].Draw(screen)
-	}
-
-	for i := range players {
-		players[i].Draw(screen)
+	for i := range e.entities {
+		e.entities[i].Draw(screen)
 	}
 }

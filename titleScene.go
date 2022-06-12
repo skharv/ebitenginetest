@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -33,6 +34,7 @@ func (t *TitleScene) Update(state *GameState, deltaTime float64) error {
 }
 
 func (t *TitleScene) Draw(screen *ebiten.Image) {
+	screen.Fill(color.RGBA{0, 0, 0, 255})
 	op := &ebiten.DrawImageOptions{}
 	op.ColorM.Scale(1, 1, 1, 1)
 
