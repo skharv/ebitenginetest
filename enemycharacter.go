@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math/rand"
-
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -18,17 +16,8 @@ func (e *EnemyCharacter) ReadInputs() {
 	e.character.ReadInputs()
 }
 
-func (e *EnemyCharacter) Update() {
-
-	var xRand, yRand int
-
-	xRand = rand.Intn(5) - 2
-	yRand = rand.Intn(5) - 2
-
-	e.character.posX += float64(xRand)
-	e.character.posY += float64(yRand)
-
-	e.character.Update()
+func (e *EnemyCharacter) Update(deltaTime float64) {
+	e.character.Update(deltaTime)
 }
 
 func (e *EnemyCharacter) Draw(screen *ebiten.Image) {

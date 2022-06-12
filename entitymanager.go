@@ -18,13 +18,13 @@ func (e *EntityManager) Init() {
 
 	for i := 0; i < 9; i++ {
 		var npc EnemyCharacter
-		npc.Init("Face "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/face.png")
+		npc.Init("Face "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/enemy.png")
 
 		characters = append(characters, npc)
 	}
 
 	var player PlayerCharacter
-	player.Init("Cute Baby", screenWidth/2, screenHeight/2, "images/babby.png")
+	player.Init("Cute Baby", screenWidth/2, screenHeight/2, "images/player.png")
 
 	players = append(players, player)
 }
@@ -39,13 +39,13 @@ func (e *EntityManager) ReadInputs() {
 	}
 }
 
-func (e *EntityManager) Update() {
+func (e *EntityManager) Update(deltaTime float64) {
 	for i := range characters {
-		characters[i].Update()
+		characters[i].Update(deltaTime)
 	}
 
 	for i := range players {
-		players[i].Update()
+		players[i].Update(deltaTime)
 	}
 }
 
