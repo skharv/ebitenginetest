@@ -16,7 +16,7 @@ type Scene interface {
 	Draw(screen *ebiten.Image)
 }
 
-const transitionMaxCount = 20
+const transitionMaxCount = 50
 
 type SceneManager struct {
 	current         Scene
@@ -72,12 +72,16 @@ func (s *SceneManager) Draw(screen *ebiten.Image) {
 	screen.DrawImage(transitionTo, op)
 }
 
-func (s *SceneManager) GoTo(scene Scene) {
+func (s *SceneManager) GoTo(scene Scene, fadeTime int) {
 	scene.Init()
+	if fadeTime > transitionMaxCount {
+		fadeTime = transitionMaxCount
+	}
+
 	if s.current == nil {
 		s.current = scene
 	} else {
 		s.next = scene
-		s.transitionCount = transitionMaxCount
+		s.transitionCount = fadeTime
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"image/color"
+	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -9,25 +10,48 @@ import (
 )
 
 type TitleScene struct {
-	space bool
+	play    bool
+	options bool
+	esc     bool
 }
 
 func (t *TitleScene) Init() {
-	t.space = false
+	t.play = false
+	t.options = false
+	t.esc = false
 }
 
 func (t *TitleScene) ReadInput() {
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
-		t.space = true
+		t.play = true
 	} else {
-		t.space = false
+		t.play = false
+	}
+
+	if inpututil.IsKeyJustPressed(ebiten.KeyO) {
+		t.options = true
+	} else {
+		t.options = false
+	}
+
+	if inpututil.IsKeyJustPressed(ebiten.KeyEscape) {
+		t.esc = true
+	} else {
+		t.esc = false
 	}
 }
 
 func (t *TitleScene) Update(state *GameState, deltaTime float64) error {
-	if t.space {
+	if t.play {
 		g := &GameScene{}
-		state.SceneManager.GoTo(g)
+		state.SceneManager.GoTo(g, 50)
+	}
+	if t.options {
+		o := &OptionsScene{}
+		state.SceneManager.GoTo(o, 10)
+	}
+	if t.esc {
+		os.Exit(0)
 	}
 	return nil
 }
@@ -37,5 +61,5 @@ func (t *TitleScene) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.ColorM.Scale(1, 1, 1, 1)
 
-	ebitenutil.DebugPrint(screen, "Press SPACE to play")
+	ebitenutil.DebugPrint(screen, "Press SPACE to play\nPress O for options\nPress ESC to quit")
 }

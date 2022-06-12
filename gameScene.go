@@ -30,7 +30,7 @@ func (g *GameScene) Update(state *GameState, deltaTime float64) error {
 	g.eManager.Update(deltaTime)
 	if g.esc {
 		t := &TitleScene{}
-		state.SceneManager.GoTo(t)
+		state.SceneManager.GoTo(t, 20)
 	}
 	return nil
 }
