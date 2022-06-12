@@ -10,10 +10,13 @@ import (
 type PlayerCharacter struct {
 	character                               Character
 	up, down, left, right, strafeL, strafeR bool
+	speed                                   float64
+	acc                                     float64
 }
 
 func (p *PlayerCharacter) Init(Name string, X, Y float64, ImageFilepath string) {
 	p.character.Init(Name, X, Y, ImageFilepath)
+	p.acc = 5
 }
 
 func (p *PlayerCharacter) ReadInputs() {
@@ -59,7 +62,7 @@ func (p *PlayerCharacter) ReadInputs() {
 
 func (p *PlayerCharacter) Update(deltaTime float64) {
 	rotSpeed := float64(5)
-	speed := float64(1)
+	strafeSpeed := float64(2)
 
 	if p.left {
 		p.character.rotation = p.character.rotation - rotSpeed*deltaTime
@@ -68,21 +71,22 @@ func (p *PlayerCharacter) Update(deltaTime float64) {
 		p.character.rotation = p.character.rotation + rotSpeed*deltaTime
 	}
 	if p.up {
-		p.character.posX += speed * math.Cos(p.character.rotation)
-		p.character.posY += speed * math.Sin(p.character.rotation)
+		p.speed += p.acc * deltaTime
 	}
 	if p.down {
-		p.character.posX -= speed * math.Cos(p.character.rotation)
-		p.character.posY -= speed * math.Sin(p.character.rotation)
+		p.speed -= p.acc * deltaTime
 	}
 	if p.strafeL {
-		p.character.posX += speed * math.Cos(p.character.rotation-(90*3.14159/180))
-		p.character.posY += speed * math.Sin(p.character.rotation-(90*3.14159/180))
+		p.character.posX += strafeSpeed * math.Cos(p.character.rotation-(90*3.14159/180))
+		p.character.posY += strafeSpeed * math.Sin(p.character.rotation-(90*3.14159/180))
 	}
 	if p.strafeR {
-		p.character.posX += speed * math.Cos(p.character.rotation+(90*3.14159/180))
-		p.character.posY += speed * math.Sin(p.character.rotation+(90*3.14159/180))
+		p.character.posX += strafeSpeed * math.Cos(p.character.rotation+(90*3.14159/180))
+		p.character.posY += strafeSpeed * math.Sin(p.character.rotation+(90*3.14159/180))
 	}
+
+	p.character.posX += p.speed * math.Cos(p.character.rotation)
+	p.character.posY += p.speed * math.Sin(p.character.rotation)
 
 	p.character.Update(deltaTime)
 }
