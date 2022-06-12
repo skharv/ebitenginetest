@@ -24,18 +24,18 @@ func (e *EntityManager) Init() {
 	}
 
 	var player PlayerCharacter
-	player.Init("Cute Baby", screenWidth/2, screenHeight/2, "images/player.png")
+	player.Init("Cute Baby", ScreenWidth/2, ScreenHeight/2, "images/player.png")
 
 	players = append(players, player)
 }
 
-func (e *EntityManager) ReadInputs() {
+func (e *EntityManager) ReadInput() {
 	for i := range characters {
-		characters[i].ReadInputs()
+		characters[i].ReadInput()
 	}
 
 	for i := range players {
-		players[i].ReadInputs()
+		players[i].ReadInput()
 	}
 }
 

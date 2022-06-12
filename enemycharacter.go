@@ -5,21 +5,21 @@ import (
 )
 
 type EnemyCharacter struct {
-	character Character
+	obj GameObject
 }
 
 func (e *EnemyCharacter) Init(Name string, X, Y float64, ImageFilepath string) {
-	e.character.Init(Name, X, Y, ImageFilepath)
+	e.obj.Init(Name, X, Y, ImageFilepath)
 }
 
-func (e *EnemyCharacter) ReadInputs() {
-	e.character.ReadInputs()
+func (e *EnemyCharacter) ReadInput() {
+	e.obj.ReadInput()
 }
 
 func (e *EnemyCharacter) Update(deltaTime float64) {
-	e.character.Update(deltaTime)
+	e.obj.Update(deltaTime)
 }
 
 func (e *EnemyCharacter) Draw(screen *ebiten.Image) {
-	e.character.Draw(screen)
+	e.obj.Draw(screen)
 }

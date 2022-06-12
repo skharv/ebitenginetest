@@ -7,7 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-type Character struct {
+type GameObject struct {
 	name     string
 	posX     float64
 	posY     float64
@@ -17,9 +17,15 @@ type Character struct {
 	width    int
 	height   int
 	sprite   *ebiten.Image
+
+	speed     float64
+	rotSpeed  float64
+	velocityX float64
+	velocityY float64
+	acc       float64
 }
 
-func (c *Character) Init(Name string, X, Y float64, ImageFilepath string) {
+func (c *GameObject) Init(Name string, X, Y float64, ImageFilepath string) {
 	img, _, err := ebitenutil.NewImageFromFile(ImageFilepath)
 	if err != nil {
 		log.Fatal(err)
@@ -34,14 +40,14 @@ func (c *Character) Init(Name string, X, Y float64, ImageFilepath string) {
 	c.width, c.height = c.sprite.Size()
 }
 
-func (c *Character) ReadInputs() {
+func (c *GameObject) ReadInput() {
 }
 
-func (c *Character) Update(deltaTime float64) {
+func (c *GameObject) Update(deltaTime float64) {
 
 }
 
-func (c *Character) Draw(screen *ebiten.Image) {
+func (c *GameObject) Draw(screen *ebiten.Image) {
 	options := &ebiten.DrawImageOptions{}
 
 	options.GeoM.Scale(c.scaleX, c.scaleY)

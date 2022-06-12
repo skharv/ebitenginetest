@@ -8,18 +8,17 @@ import (
 )
 
 type PlayerCharacter struct {
-	character                               Character
-	up, down, left, right, strafeL, strafeR bool
-	speed                                   float64
-	acc                                     float64
+	obj                   GameObject
+	up, down, left, right bool
 }
 
 func (p *PlayerCharacter) Init(Name string, X, Y float64, ImageFilepath string) {
-	p.character.Init(Name, X, Y, ImageFilepath)
-	p.acc = 5
+	p.obj.Init(Name, X, Y, ImageFilepath)
+	p.obj.rotSpeed = float64(5)
+	p.obj.speed = float64(50)
 }
 
-func (p *PlayerCharacter) ReadInputs() {
+func (p *PlayerCharacter) ReadInput() {
 	if inpututil.IsKeyJustPressed(ebiten.KeyW) {
 		p.up = true
 	}
@@ -44,53 +43,33 @@ func (p *PlayerCharacter) ReadInputs() {
 	if inpututil.IsKeyJustReleased(ebiten.KeyD) {
 		p.right = false
 	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyQ) {
-		p.strafeL = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyQ) {
-		p.strafeL = false
-	}
-	if inpututil.IsKeyJustPressed(ebiten.KeyE) {
-		p.strafeR = true
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyE) {
-		p.strafeR = false
-	}
 
-	p.character.ReadInputs()
+	p.obj.ReadInput()
 }
 
 func (p *PlayerCharacter) Update(deltaTime float64) {
-	rotSpeed := float64(5)
-	strafeSpeed := float64(2)
 
 	if p.left {
-		p.character.rotation = p.character.rotation - rotSpeed*deltaTime
+		p.obj.rotation = p.obj.rotation - p.obj.rotSpeed*deltaTime
 	}
 	if p.right {
-		p.character.rotation = p.character.rotation + rotSpeed*deltaTime
+		p.obj.rotation = p.obj.rotation + p.obj.rotSpeed*deltaTime
 	}
 	if p.up {
-		p.speed += p.acc * deltaTime
+		p.obj.velocityX = p.obj.speed * math.Cos(p.obj.rotation) * deltaTime
+		p.obj.velocityY = p.obj.speed * math.Sin(p.obj.rotation) * deltaTime
 	}
 	if p.down {
-		p.speed -= p.acc * deltaTime
-	}
-	if p.strafeL {
-		p.character.posX += strafeSpeed * math.Cos(p.character.rotation-(90*3.14159/180))
-		p.character.posY += strafeSpeed * math.Sin(p.character.rotation-(90*3.14159/180))
-	}
-	if p.strafeR {
-		p.character.posX += strafeSpeed * math.Cos(p.character.rotation+(90*3.14159/180))
-		p.character.posY += strafeSpeed * math.Sin(p.character.rotation+(90*3.14159/180))
+		p.obj.velocityX = -p.obj.speed * math.Cos(p.obj.rotation) * deltaTime
+		p.obj.velocityY = -p.obj.speed * math.Sin(p.obj.rotation) * deltaTime
 	}
 
-	p.character.posX += p.speed * math.Cos(p.character.rotation)
-	p.character.posY += p.speed * math.Sin(p.character.rotation)
+	p.obj.posX += p.obj.velocityX
+	p.obj.posY += p.obj.velocityY
 
-	p.character.Update(deltaTime)
+	p.obj.Update(deltaTime)
 }
 
 func (p *PlayerCharacter) Draw(screen *ebiten.Image) {
-	p.character.Draw(screen)
+	p.obj.Draw(screen)
 }
