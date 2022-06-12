@@ -18,11 +18,11 @@ type GameObject struct {
 	height   int
 	sprite   *ebiten.Image
 
-	speed     float64
-	rotSpeed  float64
-	velocityX float64
-	velocityY float64
-	acc       float64
+	speed        float64
+	rotSpeed     float64
+	velocityX    float64
+	velocityY    float64
+	acceleration float64
 }
 
 func (c *GameObject) Init(Name string, X, Y float64, ImageFilepath string) {
@@ -38,6 +38,11 @@ func (c *GameObject) Init(Name string, X, Y float64, ImageFilepath string) {
 	c.rotation = 0
 	c.sprite = img
 	c.width, c.height = c.sprite.Size()
+	c.speed = 0
+	c.rotSpeed = 0
+	c.velocityX = 0
+	c.velocityY = 0
+	c.acceleration = 0
 }
 
 func (c *GameObject) ReadInput() {

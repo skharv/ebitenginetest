@@ -13,7 +13,6 @@ const (
 )
 
 var (
-	sceneManager     *SceneManager
 	newTime, oldTime int64
 )
 

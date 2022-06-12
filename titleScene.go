@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -38,5 +37,5 @@ func (t *TitleScene) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.ColorM.Scale(1, 1, 1, 1)
 
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("Press SPACE to play"))
+	ebitenutil.DebugPrint(screen, "Press SPACE to play")
 }
