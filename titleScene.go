@@ -2,23 +2,43 @@ package main
 
 import (
 	"image/color"
+	"log"
 	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/tinne26/etxt"
 )
 
 type TitleScene struct {
-	play    bool
-	options bool
-	esc     bool
+	play        bool
+	options     bool
+	esc         bool
+	txtRenderer *etxt.Renderer
 }
 
 func (t *TitleScene) Init() {
 	t.play = false
 	t.options = false
 	t.esc = false
+
+	fontLib := etxt.NewFontLibrary()
+
+	_, _, err := fontLib.ParseDirFonts("fonts")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if !fontLib.HasFont("Blaka Regular") {
+		log.Fatal("missing font Blaka-Regular.ttf")
+	}
+
+	t.txtRenderer = etxt.NewStdRenderer()
+	glyphsCache := etxt.NewDefaultCache(10 * 1024 * 1024) // 10MB
+	t.txtRenderer.SetCacheHandler(glyphsCache.NewHandler())
+	t.txtRenderer.SetFont(fontLib.GetFont("Blaka Regular"))
+	t.txtRenderer.SetAlign(etxt.YCenter, etxt.XCenter)
+	t.txtRenderer.SetSizePx(24)
 }
 
 func (t *TitleScene) ReadInput() {
@@ -58,8 +78,8 @@ func (t *TitleScene) Update(state *GameState, deltaTime float64) error {
 
 func (t *TitleScene) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0, 0, 0, 255})
-	op := &ebiten.DrawImageOptions{}
-	op.ColorM.Scale(1, 1, 1, 1)
 
-	ebitenutil.DebugPrint(screen, "Press SPACE to play\nPress O for options\nPress ESC to quit")
+	t.txtRenderer.SetTarget(screen)
+	t.txtRenderer.SetColor(color.RGBA{255, 255, 255, 255})
+	t.txtRenderer.Draw("Press SPACE to play\nPress O for options\nPress ESC to quit", ScreenWidth/2, ScreenHeight/2)
 }

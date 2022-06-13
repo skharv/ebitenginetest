@@ -2,18 +2,38 @@ package main
 
 import (
 	"image/color"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/tinne26/etxt"
 )
 
 type OptionsScene struct {
-	esc bool
+	esc         bool
+	txtRenderer *etxt.Renderer
 }
 
 func (o *OptionsScene) Init() {
 	o.esc = false
+
+	fontLib := etxt.NewFontLibrary()
+
+	_, _, err := fontLib.ParseDirFonts("fonts")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if !fontLib.HasFont("Blaka Regular") {
+		log.Fatal("missing font Blaka-Regular.ttf")
+	}
+
+	o.txtRenderer = etxt.NewStdRenderer()
+	glyphsCache := etxt.NewDefaultCache(10 * 1024 * 1024) // 10MB
+	o.txtRenderer.SetCacheHandler(glyphsCache.NewHandler())
+	o.txtRenderer.SetFont(fontLib.GetFont("Blaka Regular"))
+	o.txtRenderer.SetAlign(etxt.YCenter, etxt.XCenter)
+	o.txtRenderer.SetSizePx(24)
 }
 
 func (o *OptionsScene) ReadInput() {
@@ -34,8 +54,8 @@ func (o *OptionsScene) Update(state *GameState, deltaTime float64) error {
 
 func (o *OptionsScene) Draw(screen *ebiten.Image) {
 	screen.Fill(color.RGBA{0, 0, 0, 255})
-	op := &ebiten.DrawImageOptions{}
-	op.ColorM.Scale(1, 1, 1, 1)
 
-	ebitenutil.DebugPrint(screen, "This is where options would go (if we had any)")
+	o.txtRenderer.SetTarget(screen)
+	o.txtRenderer.SetColor(color.RGBA{255, 255, 255, 255})
+	o.txtRenderer.Draw("Here is where the options would go\n(If there was any)\nESC to return to main menu", ScreenWidth/2, ScreenHeight/2)
 }
