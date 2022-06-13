@@ -30,8 +30,8 @@ func (c *GameObject) Init(Name string, X, Y float64, ImageFilepath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c.scaleX = 2
-	c.scaleY = 2
+	c.scaleX = 1
+	c.scaleY = 1
 	c.name = Name
 	c.posX = X
 	c.posY = Y
