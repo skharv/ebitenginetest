@@ -111,26 +111,21 @@ func (p *PlayerCharacter) Draw(screen *ebiten.Image) {
 	options.GeoM.Translate((-float64(p.obj.width)*p.obj.scaleX)/2, (-float64(p.obj.height)*p.obj.scaleY)/2)
 	options.GeoM.Translate(p.obj.posX, p.obj.posY)
 
+	animRow := 0
+
 	if p.flip {
-		if p.moving {
-			i := (p.count / animSpeed) % manFrames
-			mx, my := manOX+i*p.obj.width, manOFlipY
-			screen.DrawImage(p.obj.sprite.SubImage(image.Rect(mx, my, mx+p.obj.width, my+p.obj.height)).(*ebiten.Image), options)
-		} else {
-			screen.DrawImage(p.obj.sprite.SubImage(image.Rect(manOX, manOFlipY, manOX+p.obj.width, manOFlipY+p.obj.height)).(*ebiten.Image), options)
-		}
+		animRow += manOFlipY
+	}
+
+	if p.moving {
+		i := (p.count / animSpeed) % manFrames
+		mx, my := manOX+i*p.obj.width, animRow
+		screen.DrawImage(p.obj.sprite.SubImage(image.Rect(mx, my, mx+p.obj.width, my+p.obj.height)).(*ebiten.Image), options)
 	} else {
-		if p.moving {
-			i := (p.count / animSpeed) % manFrames
-			mx, my := manOX+i*p.obj.width, manOY
-			screen.DrawImage(p.obj.sprite.SubImage(image.Rect(mx, my, mx+p.obj.width, my+p.obj.height)).(*ebiten.Image), options)
-		} else {
-			screen.DrawImage(p.obj.sprite.SubImage(image.Rect(manOX, manOY, manOX+p.obj.width, manOY+p.obj.height)).(*ebiten.Image), options)
-		}
+		screen.DrawImage(p.obj.sprite.SubImage(image.Rect(manOX, animRow, manOX+p.obj.width, animRow+p.obj.height)).(*ebiten.Image), options)
 	}
 
 	j := (p.count / animSpeed) % scarfFrames
 	sx, sy := scarfOX+j*p.obj.width, scarfOY
 	screen.DrawImage(p.obj.sprite.SubImage(image.Rect(sx, sy, sx+p.obj.width, sy+p.obj.height)).(*ebiten.Image), options)
-
 }
