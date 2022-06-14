@@ -1,35 +1,43 @@
 package main
 
 import (
-	"image"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type PlayerCharacter struct {
+	animator                            Animator
 	obj                                 GameObject
 	up, down, left, right, moving, flip bool
 	count                               int
 }
 
-const (
-	scarfOX     = 0
-	scarfOY     = 32
-	scarfFrames = 5
-
-	manOX     = 0
-	manOY     = 0
-	manOFlipY = 16
-	manFrames = 4
-)
-
-var (
-	animSpeed = 10
-)
-
 func (p *PlayerCharacter) Init(Name string, X, Y float64, FrameWidth, FrameHeight int, ImageFilepath string) {
 	p.obj.Init(Name, X, Y, FrameWidth, FrameHeight, ImageFilepath)
+
+	p.animator.Init(ImageFilepath, Vector2i{16, 16}, Vector2f{4, 4}, Vector2f{ScreenWidth / 2, ScreenHeight / 2}, 10)
+	p.animator.AddAnimation(Animation{
+		frameCount:         4,
+		frameStartPosition: Vector2i{0, 0},
+		loop:               true,
+	}, "runRight")
+	p.animator.AddAnimation(Animation{
+		frameCount:         4,
+		frameStartPosition: Vector2i{0, 16},
+		loop:               true,
+	}, "runLeft")
+	p.animator.AddAnimation(Animation{
+		frameCount:         1,
+		frameStartPosition: Vector2i{0, 0},
+		loop:               true,
+	}, "standRight")
+	p.animator.AddAnimation(Animation{
+		frameCount:         1,
+		frameStartPosition: Vector2i{0, 16},
+		loop:               true,
+	}, "standLeft")
+
+	p.animator.SetAnimation("standRight", false)
 	p.obj.speed = 50
 }
 
@@ -101,31 +109,32 @@ func (p *PlayerCharacter) Update(deltaTime float64) {
 	p.obj.velocityX = 0
 	p.obj.velocityY = 0
 
+	if p.moving {
+		if p.flip {
+			if !(p.animator.IsLooping() && p.animator.IsAnimation("runLeft")) {
+				p.animator.SetAnimation("runLeft", false)
+			}
+		} else {
+			if !(p.animator.IsLooping() && p.animator.IsAnimation("runRight")) {
+				p.animator.SetAnimation("runRight", false)
+			}
+		}
+	} else {
+		if p.flip {
+			if !(p.animator.IsLooping() && p.animator.IsAnimation("standLeft")) {
+				p.animator.SetAnimation("standLeft", false)
+			}
+		} else {
+			if !(p.animator.IsLooping() && p.animator.IsAnimation("standRight")) {
+				p.animator.SetAnimation("standRight", false)
+			}
+		}
+	}
+
 	p.obj.Update(deltaTime)
+	p.animator.Update(deltaTime)
 }
 
 func (p *PlayerCharacter) Draw(screen *ebiten.Image) {
-	options := &ebiten.DrawImageOptions{}
-
-	options.GeoM.Scale(p.obj.scaleX, p.obj.scaleY)
-	options.GeoM.Translate((-float64(p.obj.width)*p.obj.scaleX)/2, (-float64(p.obj.height)*p.obj.scaleY)/2)
-	options.GeoM.Translate(p.obj.posX, p.obj.posY)
-
-	animRow := 0
-
-	if p.flip {
-		animRow += manOFlipY
-	}
-
-	if p.moving {
-		i := (p.count / animSpeed) % manFrames
-		mx, my := manOX+i*p.obj.width, animRow
-		screen.DrawImage(p.obj.sprite.SubImage(image.Rect(mx, my, mx+p.obj.width, my+p.obj.height)).(*ebiten.Image), options)
-	} else {
-		screen.DrawImage(p.obj.sprite.SubImage(image.Rect(manOX, animRow, manOX+p.obj.width, animRow+p.obj.height)).(*ebiten.Image), options)
-	}
-
-	j := (p.count / animSpeed) % scarfFrames
-	sx, sy := scarfOX+j*p.obj.width, scarfOY
-	screen.DrawImage(p.obj.sprite.SubImage(image.Rect(sx, sy, sx+p.obj.width, sy+p.obj.height)).(*ebiten.Image), options)
+	p.animator.Draw(screen)
 }
