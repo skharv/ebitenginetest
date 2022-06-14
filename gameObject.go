@@ -25,19 +25,20 @@ type GameObject struct {
 	acceleration float64
 }
 
-func (c *GameObject) Init(Name string, X, Y float64, ImageFilepath string) {
+func (c *GameObject) Init(Name string, X, Y float64, FrameWidth, FrameHeight int, ImageFilepath string) {
 	img, _, err := ebitenutil.NewImageFromFile(ImageFilepath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	c.scaleX = 1
-	c.scaleY = 1
+	c.scaleX = 2
+	c.scaleY = 2
 	c.name = Name
 	c.posX = X
 	c.posY = Y
 	c.rotation = 0
 	c.sprite = img
-	c.width, c.height = c.sprite.Size()
+	c.width = FrameWidth
+	c.height = FrameHeight
 	c.speed = 0
 	c.rotSpeed = 0
 	c.velocityX = 0

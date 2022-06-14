@@ -8,8 +8,8 @@ type EnemyCharacter struct {
 	obj GameObject
 }
 
-func (e *EnemyCharacter) Init(Name string, X, Y float64, ImageFilepath string) {
-	e.obj.Init(Name, X, Y, ImageFilepath)
+func (e *EnemyCharacter) Init(Name string, X, Y float64, FrameWidth, FrameHeight int, ImageFilepath string) {
+	e.obj.Init(Name, X, Y, FrameWidth, FrameHeight, ImageFilepath)
 }
 
 func (e *EnemyCharacter) ReadInput() {

@@ -7,7 +7,7 @@ import (
 )
 
 type Entity interface {
-	Init(Name string, X, Y float64, ImageFilepath string)
+	Init(Name string, X, Y float64, FrameWidth, FrameHeight int, ImageFilepath string)
 	ReadInput()
 	Update(deltaTime float64)
 	Draw(screen *ebiten.Image)
@@ -21,13 +21,13 @@ func (e *EntityManager) Init() {
 
 	for i := 0; i < 9; i++ {
 		npc := &EnemyCharacter{}
-		npc.Init("Baddie "+fmt.Sprint(i), float64(50*i), float64(50*i), "images/enemy.png")
+		npc.Init("Baddie "+fmt.Sprint(i), float64(50*i), float64(50*i), 16, 16, "images/enemy.png")
 
 		e.entities = append(e.entities, npc)
 	}
 
 	player := &PlayerCharacter{}
-	player.Init("You", ScreenWidth/2, ScreenHeight/2, "images/player.png")
+	player.Init("You", ScreenWidth/2, ScreenHeight/2, 16, 16, "images/man.png")
 
 	e.entities = append(e.entities, player)
 }
